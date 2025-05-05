@@ -1,7 +1,8 @@
 from sqlmodel import SQLModel, create_engine, Session
 from .models import User, Project
+import os
 
-DATABASE_URL = "postgresql://postgres:password@localhost:5432/mydb"
+DATABASE_URL = os.environ.get("DATABASE_URI")
 
 engine = create_engine(DATABASE_URL)
 
