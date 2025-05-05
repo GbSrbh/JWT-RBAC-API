@@ -16,7 +16,7 @@ def get_projects(request: Request, db: Session = Depends(get_db)):
     projects = db.exec(select(Project)).all()
     return projects
 
-@router.post("/create-project", response_model=ProjectRead)
+@router.post("/projects", response_model=ProjectRead)
 @admin_required
 def create_project(request: Request, project: ProjectCreate, db: Session = Depends(get_db)):
     db_project = Project(**project.model_dump())

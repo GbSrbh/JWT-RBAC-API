@@ -12,7 +12,7 @@ from ..app.dtos import (
 )
 from ..app.auth import PasswordHandler
 from ..db.models import User
-
+from ..exceptions import UserAlreadyExistsError, InvalidRoleError, UserNotFoundError, InvalidCredentialsError
 
 router = APIRouter()
 
@@ -25,11 +25,14 @@ USER_ROLE = {
 def register(user: SignupRequest, db: Session = Depends(get_db)):
     existing_user = db.exec(select(User).where(User.username == user.username)).first()
     if existing_user:
-        raise HTTPException(status_code=400, detail="Username already registered")
+        raise UserAlreadyExistsError(message="User with this username already exists")
 
     password_handler = PasswordHandler()
     hashed_password = password_handler.hash_password(user.password)
-    role = USER_ROLE.get(user.role)
+    try:
+        role = USER_ROLE[user.role]
+    except KeyError:
+        raise InvalidRoleError("Provided role is not supported")
 
     db_user = User(
         username=user.username,
@@ -45,11 +48,15 @@ def register(user: SignupRequest, db: Session = Depends(get_db)):
 @router.post("/login", response_model=Token)
 def login(form_data: LoginRequest, db: Session = Depends(get_db)):
     user = db.exec(select(User).where(User.username == form_data.username)).first()
+    if not user:
+        raise UserNotFoundError(message="No such user exists")
 
     password_handler = PasswordHandler()
     jwt_handler = JWTHandler()
-    if not user or not password_handler.verify_password(password=form_data.password, hashed_password=user.password):
-        raise HTTPException(status_code=400, detail="Incorrect credentials")
+
+    is_password_correct = password_handler.verify_password(password=form_data.password, hashed_password=user.password)
+    if not is_password_correct:
+        raise InvalidCredentialsError(message="Incorrect credentials")
 
     access_token = jwt_handler.generate_access_token(
         token_data={"sub": user.username, "role": user.role.value}

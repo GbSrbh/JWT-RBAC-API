@@ -12,7 +12,7 @@ class NoTokenFoundError(HTTPException):
     def __init__(self, message: str = "Authentication token not provided"):
         super().__init__(status_code=401, detail=message)
 
-class NotAdminUserError(HTTPException):
+class UserNotAdminError(HTTPException):
     def __init__(self, message: str = "Forbidden, user not admin"):
         super().__init__(status_code=403, detail=message)
 
@@ -23,3 +23,7 @@ class UserAlreadyExistsError(HTTPException):
 class UserNotFoundError(HTTPException):
     def __init__(self, message: str = "User not found"):
         super().__init__(status_code=404, detail=message)
+
+class InvalidRoleError(HTTPException):
+    def __init__(self, message: str = "Role not supported"):
+        super().__init__(status_code=400, detail=message)
