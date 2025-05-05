@@ -1,7 +1,7 @@
 from fastapi import Request
 from functools import wraps
 
-from .token import JWTHandler
+from ..handlers.jwt_handler import JWTHandler
 from ..exceptions import NoTokenFoundError, UserNotAdminError
 
 jwt_handler = JWTHandler()

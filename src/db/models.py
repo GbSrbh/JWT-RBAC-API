@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, Field
-from ..app.dtos import Role
+from ..enums import Role
 
 class UserBase(SQLModel):
     username: str = Field(index=True, unique=True)

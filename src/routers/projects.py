@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, Request
 from sqlmodel import Session, select
 
 from ..db.db_connection import get_db
-from ..app.dtos import ProjectCreate, ProjectRead
+from ..dtos import ProjectCreate, ProjectRead
 from ..db.models import Project
-from ..app.auth_decorators import auth_required, admin_required
+from ..handlers.auth_decorators import auth_required, admin_required
 
 
 router = APIRouter()

@@ -2,7 +2,7 @@ import os
 import jwt
 import datetime
 
-from ..exceptions import InvalidTokenError
+from FastAPI_PostgreSQL.src.exceptions import InvalidTokenError
 
 class JWTHandler:
     def __init__(self) -> None:

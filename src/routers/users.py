@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
-from ..app.token import JWTHandler
+from ..handlers.jwt_handler import JWTHandler
 from ..db.db_connection import get_db
-from ..app.dtos import (
+from ..dtos import (
     SignupRequest,
     SignupResponse,
     LoginRequest,
     Token,
-    Role
 )
-from ..app.auth import PasswordHandler
+from ..enums import Role
+from ..handlers.password_handler import PasswordHandler
 from ..db.models import User
 from ..exceptions import UserAlreadyExistsError, InvalidRoleError, UserNotFoundError, InvalidCredentialsError
 

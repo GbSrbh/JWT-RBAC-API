@@ -1,6 +1,5 @@
 from typing import Union
 from pydantic import BaseModel
-from enum import Enum
 
 class SignupRequest(BaseModel):
     username: str
@@ -29,7 +28,3 @@ class Token(BaseModel):
 class Payload(BaseModel):
     username: Union[str, None] = None
     role: Union[str, None] = None
-
-class Role(Enum):
-    USER = "USER"
-    ADMIN = "ADMIN"
