@@ -2,14 +2,18 @@ from typing import Union
 from pydantic import BaseModel
 from enum import Enum
 
-class UserCreate(BaseModel):
+class SignupRequest(BaseModel):
     username: str
     password: str
     role: str
 
-class UserRead(BaseModel):
+class SignupResponse(BaseModel):
     username: str
     role: str
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
 
 class ProjectCreate(BaseModel):
     name: str

@@ -8,5 +8,5 @@ class PasswordHandler:
         salt = bcrypt.gensalt(rounds=self.salt_rounds)
         return bcrypt.hashpw(password.encode(), salt).decode()
 
-    def verify_password(self, password: str, hashed: str) -> bool:
-        return bcrypt.checkpw(password.encode(), hashed.encode())
+    def verify_password(self, password: str, hashed_password: str) -> bool:
+        return bcrypt.checkpw(password.encode(), hashed_password.encode())
