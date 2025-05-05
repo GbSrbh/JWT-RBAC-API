@@ -7,7 +7,7 @@ jwt_handler = JWTHandler()
 
 def auth_required(fn):
     @wraps(fn)
-    async def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs):
         request: Request = kwargs.get("request")
 
         auth_header = request.headers.get("Authorization")
@@ -19,13 +19,13 @@ def auth_required(fn):
         payload = jwt_handler.decode_access_token(token)
         request.state.user = payload
 
-        return await fn(*args, **kwargs)
+        return fn(*args, **kwargs)
     return wrapper
 
 
 def admin_required(fn):
     @wraps(fn)
-    async def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs):
         request: Request = kwargs.get("request")
 
         auth_header = request.headers.get("Authorization")
@@ -35,9 +35,9 @@ def admin_required(fn):
         token = auth_header.split(" ")[1]
         payload = jwt_handler.decode_access_token(token)
 
-        if payload.get("role") != "admin":
+        if payload.get("role") != "ADMIN":
             raise NotAdminUserError(message="User is not admin, route restricted only for admins.")
 
         request.state.user = payload
-        return await fn(*args, **kwargs)
+        return fn(*args, **kwargs)
     return wrapper

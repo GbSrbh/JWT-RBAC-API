@@ -1,5 +1,3 @@
-print("User route loaded")
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
@@ -9,13 +7,19 @@ from ..app.dtos import (
     SignupRequest,
     SignupResponse,
     LoginRequest,
-    Token
+    Token,
+    Role
 )
 from ..app.auth import PasswordHandler
 from ..db.models import User
 
+
 router = APIRouter()
 
+USER_ROLE = {
+    "user": Role.USER,
+    "admin": Role.ADMIN
+}
 
 @router.post("/register", response_model=SignupResponse)
 def register(user: SignupRequest, db: Session = Depends(get_db)):
@@ -25,10 +29,12 @@ def register(user: SignupRequest, db: Session = Depends(get_db)):
 
     password_handler = PasswordHandler()
     hashed_password = password_handler.hash_password(user.password)
+    role = USER_ROLE.get(user.role)
+
     db_user = User(
         username=user.username,
-        hashed_password=hashed_password,
-        role=user.role
+        password=hashed_password,
+        role=role
     )
     db.add(db_user)
     db.commit()
@@ -42,10 +48,10 @@ def login(form_data: LoginRequest, db: Session = Depends(get_db)):
 
     password_handler = PasswordHandler()
     jwt_handler = JWTHandler()
-    if not user or not password_handler.verify_password(password=form_data.password, hashed_password=user.hashed_password):
+    if not user or not password_handler.verify_password(password=form_data.password, hashed_password=user.password):
         raise HTTPException(status_code=400, detail="Incorrect credentials")
 
     access_token = jwt_handler.generate_access_token(
-        token_data={"sub": user.username, "role": user.role}
+        token_data={"sub": user.username, "role": user.role.value}
     )
     return {"access_token": access_token, "token_type": "bearer"}
