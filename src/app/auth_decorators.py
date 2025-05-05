@@ -1,5 +1,6 @@
 from fastapi import Request
 from functools import wraps
+
 from .token import JWTHandler
 from ..exceptions import NoTokenFoundError, UserNotAdminError
 

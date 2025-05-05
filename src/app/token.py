@@ -10,7 +10,7 @@ class JWTHandler:
         if not self.secret_key:
             raise EnvironmentError("No secret key found for generating jwts in environment file.")
         self.algorithm = os.environ.get("JWT_ALGORITHM", "HS256")
-        self.token_expiry_time = int(os.environ.get("TOKEN_EXPIRY_TIME", "15"))
+        self.token_expiry_time = int(os.environ.get("TOKEN_EXPIRY_TIME_IN_MINUTES", "15"))
 
     def generate_access_token(self, token_data: dict) -> str:
         payload = token_data.copy()
