@@ -11,6 +11,10 @@ Built on FastAPI + PostgreSQL with SQLModel layer.
 - Role-based Authorization (Admin/Standard User)
 - JWT Authentication for secure routes
 
+
+
+Watch the walkthrough: https://drive.google.com/file/d/1_Gfp9xdw2Wt-ggibPJG5YnX7qJPPGr82/view?usp=sharing
+
 ## Installation Steps
 
 ### 1. Clone the Repository
