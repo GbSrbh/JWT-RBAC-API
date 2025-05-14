@@ -21,6 +21,10 @@ class ProjectCreate(BaseModel):
 class ProjectRead(ProjectCreate):
     id: int
 
+class UpdateProject(BaseModel):
+    id: int
+    project: ProjectCreate
+
 class Token(BaseModel):
     access_token: str
     token_type: str
